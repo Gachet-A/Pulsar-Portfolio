@@ -125,11 +125,16 @@ const aboutPoints = [
 
 function SectionLabel({ number, children, light = false }: { number: string; children: string; light?: boolean }) {
   return (
-    <span className={`label-mono mb-4 ${light ? "text-cyan-300" : "text-blue-700"}`}>
-      <span className={light ? "text-cyan-500/60" : "text-blue-400"}>{number}</span>
-      <span className={`h-px w-8 ${light ? "bg-cyan-400/50" : "bg-blue-300"}`} />
+    <h2
+      className={`inline-flex items-baseline gap-3 font-heading text-4xl font-bold tracking-tight md:text-5xl ${
+        light ? "text-white" : "text-gray-900"
+      }`}
+    >
+      <span className={`font-mono text-lg font-medium md:text-xl ${light ? "text-cyan-300" : "text-blue-700"}`}>
+        {number}
+      </span>
       {children}
-    </span>
+    </h2>
   )
 }
 
@@ -183,7 +188,13 @@ export default function Home() {
             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-blue-700 to-blue-900 text-white shadow-sm transition-transform duration-300 group-hover:rotate-12">
               <Terminal className="h-5 w-5" />
             </span>
-            <span className="font-heading text-xl font-bold tracking-tight text-blue-900">Pulsar</span>
+            <span
+              className={`font-heading text-xl font-bold tracking-tight transition-colors ${
+                scrolled ? "text-blue-900" : "text-white"
+              }`}
+            >
+              Pulsar
+            </span>
           </motion.a>
 
           <nav className="hidden items-center gap-8 md:flex">
@@ -191,12 +202,20 @@ export default function Home() {
               <motion.a
                 key={item.id}
                 href={`#${item.id}`}
-                className="group relative text-sm font-medium text-gray-600 transition-colors hover:text-blue-800"
+                className={`group relative text-sm font-medium transition-colors ${
+                  scrolled ? "text-gray-600 hover:text-blue-800" : "text-white/85 hover:text-white"
+                }`}
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.08 }}
               >
-                <span className="mr-1 font-mono text-[0.7rem] text-blue-400">{String(index + 1).padStart(2, "0")}</span>
+                <span
+                  className={`mr-1 font-mono text-[0.7rem] transition-colors ${
+                    scrolled ? "text-blue-400" : "text-cyan-300/80"
+                  }`}
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
                 {item.fr}
                 <span className="absolute -bottom-1 left-0 h-0.5 w-0 rounded-full bg-gradient-to-r from-blue-700 to-cyan-500 transition-all duration-300 group-hover:w-full" />
               </motion.a>
@@ -206,14 +225,18 @@ export default function Home() {
           <div className="hidden md:block">
             <Button
               onClick={handleScrollToContact}
-              className="group bg-blue-800 shadow-sm transition-all hover:bg-blue-900 hover:shadow-md"
+              className={`group transition-all ${
+                scrolled
+                  ? "bg-blue-800 text-white shadow-sm hover:bg-blue-900 hover:shadow-md"
+                  : "bg-white text-blue-900 shadow-md hover:bg-blue-50"
+              }`}
             >
               Contactez-Nous
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
           </div>
 
-          <div className="md:hidden">
+          <div className={`transition-colors md:hidden ${scrolled ? "text-gray-900" : "text-white"}`}>
             <MobileMenu />
           </div>
         </div>
@@ -224,10 +247,10 @@ export default function Home() {
         <section
           id="home"
           ref={heroRef}
-          className="relative flex min-h-[100svh] items-center overflow-hidden pb-24 pt-32 md:pt-36"
+          className="relative flex h-[100svh] items-center overflow-hidden pt-24"
         >
           {/* Background image with scroll parallax */}
-          <motion.div style={{ y: heroBgY, scale: heroBgScale }} className="absolute inset-0 -z-10">
+          <motion.div style={{ y: heroBgY, scale: heroBgScale }} className="absolute inset-0 z-0">
             <img
               src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2000&q=80"
               alt="Infrastructure réseau et cybersécurité Pulsar"
@@ -235,9 +258,9 @@ export default function Home() {
             />
           </motion.div>
           {/* Overlays for legibility + brand tint */}
-          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-blue-950/95 via-blue-950/80 to-blue-900/55" />
-          <div className="absolute inset-0 -z-10 bg-gradient-to-t from-blue-950/90 via-transparent to-blue-950/40" />
-          <div className="dot-grid absolute inset-0 -z-10 opacity-20" />
+          <div className="absolute inset-0 z-0 bg-gradient-to-r from-blue-950/95 via-blue-950/80 to-blue-900/55" />
+          <div className="absolute inset-0 z-0 bg-gradient-to-t from-blue-950/90 via-transparent to-blue-950/40" />
+          <div className="dot-grid absolute inset-0 z-0 opacity-20" />
 
           <div className="container relative z-10 mx-auto px-4">
             <motion.div style={{ y: heroTextY, opacity: heroTextOpacity }} className="max-w-3xl">
@@ -372,7 +395,7 @@ export default function Home() {
           <div className="marquee flex w-max items-center gap-10">
             {[...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, i) => (
               <span key={i} className="flex items-center gap-10">
-                <span className="font-mono text-sm font-medium uppercase tracking-wider text-gray-400">{item}</span>
+                <span className="font-mono text-sm font-semibold uppercase tracking-wider text-gray-900">{item}</span>
                 <span className="text-cyan-500/50">✦</span>
               </span>
             ))}
@@ -422,8 +445,7 @@ export default function Home() {
 
               <ScrollReveal direction="left">
                 <SectionLabel number="// 01">À Propos</SectionLabel>
-                <h2 className="mb-5 text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">À Propos de Pulsar</h2>
-                <h3 className="mb-3 text-xl font-semibold text-gray-900">Notre Mission</h3>
+                <h3 className="mb-3 mt-5 text-xl font-semibold text-gray-900">Notre Mission</h3>
                 <p className="mb-8 leading-relaxed text-gray-600">
                   Chez Pulsar, nous nous consacrons à renforcer les entreprises grâce à des solutions technologiques
                   innovantes. Fondée en 2007, notre entreprise est passée d'une petite équipe d'experts en cybersécurité
@@ -469,8 +491,7 @@ export default function Home() {
                 <SectionLabel number="// 02" light>
                   Nos Services
                 </SectionLabel>
-                <h2 className="mb-4 text-3xl font-bold tracking-tight text-white md:text-4xl">Nos Services</h2>
-                <p className="text-blue-100/80">
+                <p className="mt-4 text-blue-100/80">
                   Nous proposons des solutions informatiques complètes adaptées aux besoins de votre entreprise, avec un
                   accent sur la cybersécurité et l'intégration de l'IA.
                 </p>
@@ -501,8 +522,7 @@ export default function Home() {
             <ScrollReveal>
               <div className="mx-auto mb-14 flex max-w-2xl flex-col items-center text-center">
                 <SectionLabel number="// 03">Nos Références</SectionLabel>
-                <h2 className="mb-4 text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">Nos Références</h2>
-                <p className="text-gray-600">
+                <p className="mt-4 text-gray-600">
                   Nous avons eu le privilège de travailler avec des entreprises de premier plan dans divers secteurs.
                 </p>
               </div>
@@ -531,8 +551,7 @@ export default function Home() {
             <ScrollReveal>
               <div className="mx-auto mb-14 flex max-w-2xl flex-col items-center text-center">
                 <SectionLabel number="// 04">Contact</SectionLabel>
-                <h2 className="mb-4 text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">Contactez-Nous</h2>
-                <p className="text-gray-600">
+                <p className="mt-4 text-gray-600">
                   Prêt à sécuriser votre avenir numérique ? Entrez en contact avec notre équipe d'experts.
                 </p>
               </div>
