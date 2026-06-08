@@ -1,9 +1,24 @@
 "use client"
 
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { ChevronDown, Code, Shield, Zap, Mail, Users, Building, CheckCircle, ArrowDown, Server } from "lucide-react"
-import { motion, useScroll, useTransform } from "framer-motion"
+import {
+  ChevronDown,
+  Code,
+  Shield,
+  Zap,
+  Mail,
+  Users,
+  Building,
+  CheckCircle,
+  Server,
+  ArrowRight,
+  MapPin,
+  Phone,
+  Terminal,
+  Linkedin,
+} from "lucide-react"
+import { motion, useScroll, useSpring, useTransform } from "framer-motion"
 import MobileMenu from "@/components/mobile-menu"
 import ContactForm from "@/components/contact-form"
 import ServiceCard from "@/components/service-card"
@@ -11,68 +26,193 @@ import ReferenceCard from "@/components/reference-card"
 import ScrollReveal from "@/components/scroll-reveal"
 import ParallaxSection from "@/components/parallax-section"
 import TechBackground from "@/components/tech-background"
+import CountUp from "@/components/count-up"
+
+const navItems = [
+  { id: "home", fr: "Accueil" },
+  { id: "about", fr: "À Propos" },
+  { id: "services", fr: "Services" },
+  { id: "references", fr: "Références" },
+  { id: "contact", fr: "Contact" },
+]
+
+const marqueeItems = [
+  "Solutions IA",
+  "Cybersécurité",
+  "Infrastructure Cloud",
+  "Conseil IT",
+  "Développement Logiciel",
+  "Support 24/7",
+]
+
+const services = [
+  {
+    title: "Solutions IA",
+    description:
+      "Implémentation d'IA personnalisée pour automatiser les processus et obtenir des insights à partir de vos données.",
+    icon: <Code className="h-6 w-6" />,
+  },
+  {
+    title: "Cybersécurité",
+    description: "Audits de sécurité complets, détection des menaces et systèmes de protection.",
+    icon: <Shield className="h-6 w-6" />,
+  },
+  {
+    title: "Infrastructure Cloud",
+    description: "Solutions cloud sécurisées et évolutives conçues pour les besoins de votre entreprise.",
+    icon: <Server className="h-6 w-6" />,
+  },
+  {
+    title: "Conseil IT",
+    description: "Planification technologique stratégique et accompagnement dans la transformation digitale.",
+    icon: <Users className="h-6 w-6" />,
+  },
+  {
+    title: "Développement Logiciel",
+    description: "Solutions logicielles personnalisées conçues avec sécurité et évolutivité.",
+    icon: <Code className="h-6 w-6" />,
+  },
+  {
+    title: "Support 24/7",
+    description: "Support technique et surveillance de vos systèmes 24h/24 et 7j/7.",
+    icon: <CheckCircle className="h-6 w-6" />,
+  },
+]
+
+const references = [
+  {
+    company: "TechCorp Inc.",
+    project: "Système de Sécurité Alimenté par l'IA",
+    testimonial: "Pulsar a transformé notre infrastructure de sécurité avec leurs solutions d'IA innovantes.",
+  },
+  {
+    company: "Global Finance",
+    project: "Migration Cloud Sécurisée",
+    testimonial:
+      "L'équipe de Pulsar a assuré la protection de nos données financières sensibles tout au long de notre transition vers le cloud.",
+  },
+  {
+    company: "HealthTech Solutions",
+    project: "Systèmes Conformes RGPD",
+    testimonial:
+      "L'expertise de Pulsar dans les réglementations de sécurité des soins de santé a été inestimable pour nos besoins de conformité.",
+  },
+  {
+    company: "E-commerce Géant",
+    project: "Système de Détection de Fraude",
+    testimonial: "La solution d'IA développée par Pulsar a réduit nos incidents de fraude de 87% au premier trimestre.",
+  },
+  {
+    company: "Agence Gouvernementale",
+    project: "Protection des Infrastructures Critiques",
+    testimonial:
+      "Les protocoles de cybersécurité de Pulsar dépassent nos exigences strictes pour les systèmes de sécurité nationale.",
+  },
+  {
+    company: "Institution Éducative",
+    project: "Plateforme d'Apprentissage Sécurisée",
+    testimonial:
+      "Les données de nos étudiants et de notre corps enseignant n'ont jamais été aussi sécurisées grâce à l'approche globale de Pulsar.",
+  },
+]
+
+const aboutPoints = [
+  { icon: <Shield className="h-5 w-5" />, title: "Sécurité d'Abord", desc: "Nous priorisons la protection de vos données" },
+  { icon: <Zap className="h-5 w-5" />, title: "Solutions Innovantes", desc: "Intégration de technologies de pointe" },
+  { icon: <Users className="h-5 w-5" />, title: "Équipe d'Experts", desc: "Professionnels certifiés" },
+  { icon: <Building className="h-5 w-5" />, title: "Portée Mondiale", desc: "Service aux clients du monde entier" },
+]
+
+function SectionLabel({ number, children, light = false }: { number: string; children: string; light?: boolean }) {
+  return (
+    <span className={`label-mono mb-4 ${light ? "text-cyan-300" : "text-blue-700"}`}>
+      <span className={light ? "text-cyan-500/60" : "text-blue-400"}>{number}</span>
+      <span className={`h-px w-8 ${light ? "bg-cyan-400/50" : "bg-blue-300"}`} />
+      {children}
+    </span>
+  )
+}
 
 export default function Home() {
-  const scrollRef = useRef(null)
-  const { scrollYProgress } = useScroll({
-    target: scrollRef,
-    offset: ["start start", "end end"],
-  })
+  const { scrollYProgress } = useScroll()
+  const progressScaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.3 })
+  const [scrolled, setScrolled] = useState(false)
 
-  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0])
-  const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.8])
+  // Hero scroll parallax
+  const heroRef = useRef<HTMLElement>(null)
+  const { scrollYProgress: heroProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] })
+  const heroTextY = useTransform(heroProgress, [0, 1], [0, 80])
+  const heroTextOpacity = useTransform(heroProgress, [0, 0.7], [1, 0])
+  const heroBgY = useTransform(heroProgress, [0, 1], [0, 120])
+  const heroBgScale = useTransform(heroProgress, [0, 1], [1, 1.12])
 
-  const handleScrollToContact = () => {
-    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
-  }
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24)
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
 
-  const handleScrollToAbout = () => {
-    document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })
-  }
+  const handleScrollToAbout = () => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })
+  const handleScrollToContact = () => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
 
   return (
-    <div className="min-h-screen bg-white" ref={scrollRef}>
+    <div className="min-h-screen bg-white">
       <TechBackground />
 
+      {/* Scroll progress bar */}
+      <motion.div
+        className="fixed left-0 top-0 z-[60] h-0.5 w-full origin-left bg-gradient-to-r from-blue-700 via-cyan-500 to-teal-500"
+        style={{ scaleX: progressScaleX }}
+      />
+
       {/* Navigation */}
-      <header className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-sm z-50 border-b border-gray-100">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <motion.div
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+          scrolled ? "border-b border-blue-900/[0.06] bg-white/80 backdrop-blur-md shadow-sm" : "bg-transparent"
+        }`}
+      >
+        <div className="container mx-auto flex items-center justify-between px-4 py-4">
+          <motion.a
+            href="#home"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-2xl font-bold text-blue-700"
+            className="group flex items-center gap-2.5"
           >
-            Pulsar
-          </motion.div>
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-blue-700 to-blue-900 text-white shadow-sm transition-transform duration-300 group-hover:rotate-12">
+              <Terminal className="h-5 w-5" />
+            </span>
+            <span className="font-heading text-xl font-bold tracking-tight text-blue-900">Pulsar</span>
+          </motion.a>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8">
-            {[
-              { id: "home", fr: "Accueil" },
-              { id: "about", fr: "À Propos" },
-              { id: "services", fr: "Services" },
-              { id: "references", fr: "Références" },
-              { id: "contact", fr: "Contact" },
-            ].map((item, index) => (
+          <nav className="hidden items-center gap-8 md:flex">
+            {navItems.map((item, index) => (
               <motion.a
                 key={item.id}
                 href={`#${item.id}`}
-                className="text-gray-700 hover:text-blue-700 transition-colors relative group"
+                className="group relative text-sm font-medium text-gray-600 transition-colors hover:text-blue-800"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                transition={{ duration: 0.5, delay: index * 0.08 }}
               >
+                <span className="mr-1 font-mono text-[0.7rem] text-blue-400">{String(index + 1).padStart(2, "0")}</span>
                 {item.fr}
-                <motion.span
-                  className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-700 group-hover:w-full transition-all duration-300"
-                  whileHover={{ width: "100%" }}
-                />
+                <span className="absolute -bottom-1 left-0 h-0.5 w-0 rounded-full bg-gradient-to-r from-blue-700 to-cyan-500 transition-all duration-300 group-hover:w-full" />
               </motion.a>
             ))}
           </nav>
 
-          {/* Mobile Navigation - Only shown on mobile */}
+          <div className="hidden md:block">
+            <Button
+              onClick={handleScrollToContact}
+              className="group bg-blue-800 shadow-sm transition-all hover:bg-blue-900 hover:shadow-md"
+            >
+              Contactez-Nous
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </div>
+
           <div className="md:hidden">
             <MobileMenu />
           </div>
@@ -81,181 +221,235 @@ export default function Home() {
 
       <main>
         {/* Hero Section */}
-        <section id="home" className="pt-24 pb-16 md:pt-32 md:pb-24 relative overflow-hidden">
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="flex flex-col md:flex-row items-center">
-              <div className="md:w-1/2 mb-10 md:mb-0">
-                <motion.h1
-                  className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  Sécuriser Votre Avenir{" "}
+        <section
+          id="home"
+          ref={heroRef}
+          className="relative flex min-h-[100svh] items-center overflow-hidden pb-24 pt-32 md:pt-36"
+        >
+          {/* Background image with scroll parallax */}
+          <motion.div style={{ y: heroBgY, scale: heroBgScale }} className="absolute inset-0 -z-10">
+            <img
+              src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2000&q=80"
+              alt="Infrastructure réseau et cybersécurité Pulsar"
+              className="h-full w-full object-cover"
+            />
+          </motion.div>
+          {/* Overlays for legibility + brand tint */}
+          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-blue-950/95 via-blue-950/80 to-blue-900/55" />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-t from-blue-950/90 via-transparent to-blue-950/40" />
+          <div className="dot-grid absolute inset-0 -z-10 opacity-20" />
+
+          <div className="container relative z-10 mx-auto px-4">
+            <motion.div style={{ y: heroTextY, opacity: heroTextOpacity }} className="max-w-3xl">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 backdrop-blur-md"
+              >
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-400" />
+                </span>
+                <span className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-cyan-100">
+                  Infogérance · Genève · PME
+                </span>
+              </motion.div>
+
+              <h1 className="font-heading text-4xl font-bold leading-[1.06] tracking-tight text-white md:text-6xl lg:text-[4.2rem]">
+                {"Sécuriser Votre Avenir ".split(" ").map((word, i) => (
                   <motion.span
-                    className="text-blue-700 inline-block"
-                    animate={{
-                      color: [
-                        "rgb(29, 78, 216)", // blue-700
-                        "rgb(30, 64, 175)", // blue-800
-                        "rgb(30, 58, 138)", // blue-900
-                        "rgb(8, 145, 178)", // cyan-600
-                        "rgb(13, 148, 136)", // teal-600
-                        "rgb(29, 78, 216)", // back to blue-700
-                      ],
-                    }}
-                    transition={{ duration: 10, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                    key={i}
+                    className="inline-block"
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.1 + i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    {word}&nbsp;
+                  </motion.span>
+                ))}
+                <span className="relative inline-flex items-baseline whitespace-nowrap">
+                  <motion.span
+                    className="text-gradient-light"
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.34, ease: [0.22, 1, 0.36, 1] }}
                   >
                     Numérique
                   </motion.span>
-                </motion.h1>
-                <motion.p
-                  className="text-lg text-gray-600 mb-8"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                >
-                  Pulsar propose des solutions d'IA de pointe et des services de cybersécurité pour protéger votre
-                  entreprise dans un paysage numérique de plus en plus complexe.
-                </motion.p>
-                <motion.div
-                  className="flex flex-col sm:flex-row gap-4"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.4 }}
-                >
-                  <Button size="lg" onClick={handleScrollToContact} className="bg-blue-700 hover:bg-blue-800 group">
-                    Contactez-Nous{" "}
-                    <motion.div
-                      className="ml-2 inline-flex"
-                      animate={{ x: [0, 5, 0] }}
-                      transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-                    >
-                      <Mail className="h-4 w-4" />
-                    </motion.div>
-                  </Button>
-                  <Button size="lg" variant="outline" onClick={handleScrollToAbout} className="border-blue-700 text-blue-700 hover:bg-blue-50 group">
-                    En Savoir Plus{" "}
-                    <motion.div
-                      className="ml-2 inline-flex"
-                      animate={{ y: [0, 3, 0] }}
-                      transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-                    >
-                      <ChevronDown className="h-4 w-4" />
-                    </motion.div>
-                  </Button>
-                </motion.div>
-              </div>
-              <div className="md:w-1/2">
-                <motion.div
-                  className="relative"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.6 }}
-                >
-                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-700 to-blue-900 rounded-lg blur opacity-30 animate-pulse"></div>
-                  <motion.div
-                    className="relative bg-white rounded-lg overflow-hidden shadow-xl"
-                    whileHover={{ scale: 1.03 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <img
-                      src="/placeholder.svg?height=400&width=600"
-                      alt="IA et Visualisation de Cybersécurité"
-                      className="w-full h-auto"
-                    />
+                  <motion.span
+                    aria-hidden
+                    className="ml-1.5 inline-block h-[0.78em] w-[0.5ch] translate-y-[0.04em] rounded-[2px] bg-cyan-400"
+                    animate={{ opacity: [1, 1, 0, 0] }}
+                    transition={{
+                      duration: 1.1,
+                      times: [0, 0.5, 0.5, 1],
+                      repeat: Number.POSITIVE_INFINITY,
+                      ease: "linear",
+                    }}
+                  />
+                </span>
+              </h1>
 
-                    {/* Floating elements */}
-                    <motion.div
-                      className="absolute top-10 right-10 w-16 h-16 bg-blue-800 rounded-full opacity-20"
-                      animate={{ y: [0, -15, 0] }}
-                      transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-                    />
-                    <motion.div
-                      className="absolute bottom-10 left-10 w-20 h-20 bg-teal-600 rounded-full opacity-20"
-                      animate={{ y: [0, 15, 0] }}
-                      transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: 1 }}
-                    />
-                  </motion.div>
-                </motion.div>
-              </div>
-            </div>
+              <motion.p
+                className="mt-7 max-w-xl text-lg leading-relaxed text-blue-100/90"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.45 }}
+              >
+                Pulsar propose des solutions d'IA de pointe et des services de cybersécurité pour protéger votre
+                entreprise dans un paysage numérique de plus en plus complexe.
+              </motion.p>
+
+              <motion.div
+                className="mt-8 flex flex-col gap-4 sm:flex-row"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.55 }}
+              >
+                <Button
+                  size="lg"
+                  onClick={handleScrollToContact}
+                  className="group bg-white text-blue-900 shadow-lg transition-all hover:bg-blue-50 hover:shadow-xl"
+                >
+                  Contactez-Nous
+                  <Mail className="ml-2 h-4 w-4 transition-transform group-hover:-translate-y-0.5" />
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="group border-white/30 bg-white/5 text-white backdrop-blur-sm transition-all hover:border-white/60 hover:bg-white/10"
+                  onClick={handleScrollToAbout}
+                >
+                  En Savoir Plus
+                  <ChevronDown className="ml-2 h-4 w-4 transition-transform group-hover:translate-y-0.5" />
+                </Button>
+              </motion.div>
+
+              <motion.div
+                className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 font-mono text-xs text-blue-100/80"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.7 }}
+              >
+                <span className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-cyan-400" /> Experts certifiés
+                </span>
+                <span className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-cyan-400" /> Support 24/7
+                </span>
+                <span className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-cyan-400" /> Proximité genevoise
+                </span>
+              </motion.div>
+            </motion.div>
           </div>
+
+          {/* Scroll cue */}
+          <motion.button
+            onClick={handleScrollToAbout}
+            aria-label="Défiler vers le bas"
+            className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-white/70 transition-colors hover:text-white"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1, duration: 0.6 }}
+          >
+            <motion.span
+              className="flex flex-col items-center gap-1"
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 1.8, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+            >
+              <span className="font-mono text-[0.65rem] uppercase tracking-[0.2em]">Scroll</span>
+              <ChevronDown className="h-5 w-5" />
+            </motion.span>
+          </motion.button>
         </section>
 
+        {/* Expertise marquee */}
+        <div className="relative overflow-hidden border-y border-blue-900/[0.06] bg-white/70 py-5 backdrop-blur-sm">
+          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-white to-transparent" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-white to-transparent" />
+          <div className="marquee flex w-max items-center gap-10">
+            {[...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, i) => (
+              <span key={i} className="flex items-center gap-10">
+                <span className="font-mono text-sm font-medium uppercase tracking-wider text-gray-400">{item}</span>
+                <span className="text-cyan-500/50">✦</span>
+              </span>
+            ))}
+          </div>
+        </div>
+
         {/* About Section */}
-        <section id="about" className="py-16 bg-gray-50 relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-blue-800 rounded-full blur-3xl -mr-48 -mt-48"></div>
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-900 rounded-full blur-3xl -ml-48 -mb-48"></div>
+        <section id="about" className="relative overflow-hidden bg-gray-50/80 py-20 md:py-28">
+          <div className="absolute inset-0 opacity-[0.07]">
+            <div className="absolute right-0 top-0 -mr-48 -mt-48 h-96 w-96 rounded-full bg-blue-900 blur-3xl" />
+            <div className="absolute bottom-0 left-0 -mb-48 -ml-48 h-96 w-96 rounded-full bg-cyan-700 blur-3xl" />
           </div>
 
-          <div className="container mx-auto px-4 relative z-10">
-            <ScrollReveal>
-              <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">À Propos de Pulsar</h2>
-                <div className="w-20 h-1 bg-blue-700 mx-auto"></div>
-              </div>
-            </ScrollReveal>
+          <div className="container relative z-10 mx-auto px-4">
+            <div className="grid items-center gap-12 lg:grid-cols-2">
+              <ScrollReveal direction="right">
+                <ParallaxSection speed={-0.15}>
+                  <div className="relative">
+                    <div className="absolute -inset-3 rounded-3xl bg-gradient-to-br from-blue-200/50 to-cyan-200/40 blur-xl" />
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ duration: 0.4 }}
+                      className="relative overflow-hidden rounded-3xl border border-white/60 shadow-xl"
+                    >
+                      <img
+                        src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1100&q=80"
+                        alt="L'équipe d'experts Pulsar"
+                        className="h-[440px] w-full object-cover"
+                      />
+                    </motion.div>
 
-            <div className="flex flex-col md:flex-row items-center">
-              <ScrollReveal direction="right" className="md:w-1/2 mb-8 md:mb-0 md:pr-8">
-                <ParallaxSection speed={-0.2}>
-                  <motion.div whileHover={{ scale: 1.03 }} transition={{ duration: 0.3 }}>
-                    <img
-                      src="/placeholder.svg?height=400&width=600"
-                      alt="Équipe Pulsar"
-                      className="rounded-lg shadow-lg"
-                    />
-                  </motion.div>
+                    <motion.div
+                      className="absolute -bottom-6 -right-4 rounded-2xl border border-blue-900/[0.06] bg-white px-6 py-4 shadow-xl sm:-right-6"
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: 0.3 }}
+                    >
+                      <p className="font-heading text-3xl font-bold text-gradient">
+                        <CountUp to={19} suffix="+" /> ans
+                      </p>
+                      <p className="font-mono text-xs uppercase tracking-wider text-gray-500">d'expertise IT</p>
+                    </motion.div>
+                  </div>
                 </ParallaxSection>
               </ScrollReveal>
 
-              <ScrollReveal direction="left" className="md:w-1/2">
-                <h3 className="text-2xl font-semibold text-gray-900 mb-4">Notre Mission</h3>
-                <p className="text-gray-600 mb-6">
+              <ScrollReveal direction="left">
+                <SectionLabel number="// 01">À Propos</SectionLabel>
+                <h2 className="mb-5 text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">À Propos de Pulsar</h2>
+                <h3 className="mb-3 text-xl font-semibold text-gray-900">Notre Mission</h3>
+                <p className="mb-8 leading-relaxed text-gray-600">
                   Chez Pulsar, nous nous consacrons à renforcer les entreprises grâce à des solutions technologiques
                   innovantes. Fondée en 2007, notre entreprise est passée d'une petite équipe d'experts en cybersécurité
                   à un fournisseur complet de solutions informatiques spécialisé dans l'intégration de l'IA et les
                   protocoles de sécurité avancés.
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                  <motion.div className="flex items-start" whileHover={{ x: 5 }} transition={{ duration: 0.2 }}>
-                    <div className="mr-4 mt-1 bg-blue-100 p-2 rounded-full">
-                      <Shield className="h-5 w-5 text-blue-700" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Sécurité d'Abord</h4>
-                      <p className="text-sm text-gray-600">Nous priorisons la protection de vos données</p>
-                    </div>
-                  </motion.div>
-                  <motion.div className="flex items-start" whileHover={{ x: 5 }} transition={{ duration: 0.2 }}>
-                    <div className="mr-4 mt-1 bg-cyan-100 p-2 rounded-full">
-                      <Zap className="h-5 w-5 text-cyan-700" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Solutions Innovantes</h4>
-                      <p className="text-sm text-gray-600">Intégration de technologies de pointe</p>
-                    </div>
-                  </motion.div>
-                  <motion.div className="flex items-start" whileHover={{ x: 5 }} transition={{ duration: 0.2 }}>
-                    <div className="mr-4 mt-1 bg-teal-100 p-2 rounded-full">
-                      <Users className="h-5 w-5 text-teal-700" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Équipe d'Experts</h4>
-                      <p className="text-sm text-gray-600">Professionnels certifiés</p>
-                    </div>
-                  </motion.div>
-                  <motion.div className="flex items-start" whileHover={{ x: 5 }} transition={{ duration: 0.2 }}>
-                    <div className="mr-4 mt-1 bg-blue-100 p-2 rounded-full">
-                      <Building className="h-5 w-5 text-blue-800" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Portée Mondiale</h4>
-                      <p className="text-sm text-gray-600">Service aux clients du monde entier</p>
-                    </div>
-                  </motion.div>
+
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  {aboutPoints.map((item, index) => (
+                    <motion.div
+                      key={item.title}
+                      className="group flex items-start gap-3 rounded-xl border border-transparent p-3 transition-all hover:border-blue-900/[0.06] hover:bg-white hover:shadow-sm"
+                      initial={{ opacity: 0, y: 16 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: index * 0.1 }}
+                    >
+                      <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-50 to-cyan-50 text-blue-700 ring-1 ring-blue-900/5 transition-transform group-hover:-rotate-6 group-hover:scale-110">
+                        {item.icon}
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-gray-900">{item.title}</h4>
+                        <p className="text-sm text-gray-600">{item.desc}</p>
+                      </div>
+                    </motion.div>
+                  ))}
                 </div>
               </ScrollReveal>
             </div>
@@ -263,135 +457,60 @@ export default function Home() {
         </section>
 
         {/* Services Section */}
-        <section id="services" className="py-16 relative">
-          <div className="absolute inset-0 overflow-hidden">
-            <motion.div
-              className="absolute top-1/4 left-0 w-64 h-64 bg-blue-800 rounded-full opacity-5"
-              style={{ x: -100 }}
-            />
-            <motion.div
-              className="absolute bottom-1/4 right-0 w-64 h-64 bg-blue-900 rounded-full opacity-5"
-              style={{ x: 100 }}
-            />
-          </div>
+        <section id="services" className="relative overflow-hidden bg-blue-950 py-20 md:py-28">
+          <div className="absolute inset-0 tech-gradient opacity-90" />
+          <div className="dot-grid absolute inset-0 opacity-40" />
+          <div className="absolute left-0 top-1/4 h-64 w-64 rounded-full bg-cyan-500/10 blur-3xl" />
+          <div className="absolute bottom-1/4 right-0 h-64 w-64 rounded-full bg-blue-400/10 blur-3xl" />
 
-          <div className="container mx-auto px-4 relative z-10">
+          <div className="container relative z-10 mx-auto px-4">
             <ScrollReveal>
-              <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Nos Services</h2>
-                <div className="w-20 h-1 tech-gradient mx-auto mb-6"></div>
-                <p className="text-gray-600 max-w-2xl mx-auto">
+              <div className="mx-auto mb-14 flex max-w-2xl flex-col items-center text-center">
+                <SectionLabel number="// 02" light>
+                  Nos Services
+                </SectionLabel>
+                <h2 className="mb-4 text-3xl font-bold tracking-tight text-white md:text-4xl">Nos Services</h2>
+                <p className="text-blue-100/80">
                   Nous proposons des solutions informatiques complètes adaptées aux besoins de votre entreprise, avec un
                   accent sur la cybersécurité et l'intégration de l'IA.
                 </p>
               </div>
             </ScrollReveal>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <ScrollReveal delay={0.1}>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {services.map((service, index) => (
                 <ServiceCard
-                  title="Solutions IA"
-                  description="Implémentation d'IA personnalisée pour automatiser les processus et obtenir des insights à partir de vos données."
-                  icon={<Code />}
+                  key={service.title}
+                  index={index}
+                  title={service.title}
+                  description={service.description}
+                  icon={service.icon}
+                  darkMode
                 />
-              </ScrollReveal>
-              <ScrollReveal delay={0.2}>
-                <ServiceCard
-                  title="Cybersécurité"
-                  description="Audits de sécurité complets, détection des menaces et systèmes de protection."
-                  icon={<Shield />}
-                />
-              </ScrollReveal>
-              <ScrollReveal delay={0.3}>
-                <ServiceCard
-                  title="Infrastructure Cloud"
-                  description="Solutions cloud sécurisées et évolutives conçues pour les besoins de votre entreprise."
-                  icon={<Server />}
-                />
-              </ScrollReveal>
-              <ScrollReveal delay={0.4}>
-                <ServiceCard
-                  title="Conseil IT"
-                  description="Planification technologique stratégique et accompagnement dans la transformation digitale."
-                  icon={<Users />}
-                />
-              </ScrollReveal>
-              <ScrollReveal delay={0.5}>
-                <ServiceCard
-                  title="Développement Logiciel"
-                  description="Solutions logicielles personnalisées conçues avec sécurité et évolutivité."
-                  icon={<Code />}
-                />
-              </ScrollReveal>
-              <ScrollReveal delay={0.6}>
-                <ServiceCard
-                  title="Support 24/7"
-                  description="Support technique et surveillance de vos systèmes 24h/24 et 7j/7."
-                  icon={<CheckCircle />}
-                />
-              </ScrollReveal>
+              ))}
             </div>
           </div>
         </section>
 
         {/* References Section */}
-        <section id="references" className="py-16 bg-gray-50 relative overflow-hidden">
-          <div className="absolute inset-0">
-            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-900/5 to-blue-700/5"></div>
-            <div className="absolute inset-0 tech-grid"></div>
-          </div>
+        <section id="references" className="relative overflow-hidden bg-gray-50/80 py-20 md:py-28">
+          <div className="absolute inset-0 tech-grid opacity-70" />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/[0.03] to-cyan-800/[0.03]" />
 
-          <div className="container mx-auto px-4 relative z-10">
+          <div className="container relative z-10 mx-auto px-4">
             <ScrollReveal>
-              <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Nos Références</h2>
-                <div className="w-20 h-1 bg-blue-700 mx-auto mb-6"></div>
-                <p className="text-gray-600 max-w-2xl mx-auto">
+              <div className="mx-auto mb-14 flex max-w-2xl flex-col items-center text-center">
+                <SectionLabel number="// 03">Nos Références</SectionLabel>
+                <h2 className="mb-4 text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">Nos Références</h2>
+                <p className="text-gray-600">
                   Nous avons eu le privilège de travailler avec des entreprises de premier plan dans divers secteurs.
                 </p>
               </div>
             </ScrollReveal>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[
-                {
-                  company: "TechCorp Inc.",
-                  project: "Système de Sécurité Alimenté par l'IA",
-                  testimonial:
-                    "Pulsar a transformé notre infrastructure de sécurité avec leurs solutions d'IA innovantes.",
-                },
-                {
-                  company: "Global Finance",
-                  project: "Migration Cloud Sécurisée",
-                  testimonial:
-                    "L'équipe de Pulsar a assuré la protection de nos données financières sensibles tout au long de notre transition vers le cloud.",
-                },
-                {
-                  company: "HealthTech Solutions",
-                  project: "Systèmes Conformes RGPD",
-                  testimonial:
-                    "L'expertise de Pulsar dans les réglementations de sécurité des soins de santé a été inestimable pour nos besoins de conformité.",
-                },
-                {
-                  company: "E-commerce Géant",
-                  project: "Système de Détection de Fraude",
-                  testimonial:
-                    "La solution d'IA développée par Pulsar a réduit nos incidents de fraude de 87% au premier trimestre.",
-                },
-                {
-                  company: "Agence Gouvernementale",
-                  project: "Protection des Infrastructures Critiques",
-                  testimonial:
-                    "Les protocoles de cybersécurité de Pulsar dépassent nos exigences strictes pour les systèmes de sécurité nationale.",
-                },
-                {
-                  company: "Institution Éducative",
-                  project: "Plateforme d'Apprentissage Sécurisée",
-                  testimonial:
-                    "Les données de nos étudiants et de notre corps enseignant n'ont jamais été aussi sécurisées grâce à l'approche globale de Pulsar.",
-                },
-              ].map((reference, index) => (
-                <ScrollReveal key={reference.company} delay={index * 0.1}>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {references.map((reference, index) => (
+                <ScrollReveal key={reference.company} delay={index * 0.08}>
                   <ReferenceCard
                     company={reference.company}
                     project={reference.project}
@@ -404,74 +523,66 @@ export default function Home() {
         </section>
 
         {/* Contact Section */}
-        <section id="contact" className="py-16 relative overflow-hidden">
-          <div className="absolute inset-0">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-blue-800 rounded-full blur-3xl opacity-5 -mr-48 -mt-48"></div>
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-teal-700 rounded-full blur-3xl opacity-5 -ml-48 -mb-48"></div>
-            <div className="absolute inset-0 circuit-bg"></div>
-          </div>
+        <section id="contact" className="relative overflow-hidden py-20 md:py-28">
+          <div className="hero-glow absolute inset-0" />
+          <div className="circuit-bg absolute inset-0" />
 
-          <div className="container mx-auto px-4 relative z-10">
+          <div className="container relative z-10 mx-auto px-4">
             <ScrollReveal>
-              <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Contactez-Nous</h2>
-                <div className="w-20 h-1 tech-gradient mx-auto mb-6"></div>
-                <p className="text-gray-600 max-w-2xl mx-auto">
+              <div className="mx-auto mb-14 flex max-w-2xl flex-col items-center text-center">
+                <SectionLabel number="// 04">Contact</SectionLabel>
+                <h2 className="mb-4 text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">Contactez-Nous</h2>
+                <p className="text-gray-600">
                   Prêt à sécuriser votre avenir numérique ? Entrez en contact avec notre équipe d'experts.
                 </p>
               </div>
             </ScrollReveal>
 
-            <div className="flex flex-col lg:flex-row gap-12">
-              <ScrollReveal direction="right" className="lg:w-1/2">
+            <div className="grid items-stretch gap-8 lg:grid-cols-5">
+              <ScrollReveal direction="right" className="lg:col-span-3">
                 <ContactForm />
               </ScrollReveal>
 
-              <ScrollReveal direction="left" className="lg:w-1/2">
-                <div className="bg-gray-50 p-8 rounded-lg h-full">
-                  <h3 className="text-2xl font-semibold text-gray-900 mb-6">Contact</h3>
-                  <div className="space-y-6">
-                    <motion.div className="flex items-start" whileHover={{ x: 5 }} transition={{ duration: 0.2 }}>
-                      <div className="mr-4 mt-1 bg-blue-100 p-2 rounded-full">
-                        <Building className="h-5 w-5 text-blue-700" />
-                      </div>
-                      <div>
-                        <p className="text-gray-600">CH-1219, Genève (Aïre)</p>
-                        <p className="text-gray-600">info@pulsarvoip.ch</p>
-                        <p className="text-gray-600">+41 22 510 20 19</p>
-                      </div>
-                    </motion.div>
-                    <div className="mt-8">
-                      <h4 className="font-semibold text-gray-900 mb-4">Suivez-Nous</h4>
-                      <div className="flex">
-                        <motion.a
-                          href="#"
-                          className="bg-white p-3 rounded-full shadow-sm hover:shadow-md transition-shadow"
-                          whileHover={{ y: -5 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <span className="sr-only">LinkedIn</span>
-                          <div className="w-6 h-6 rounded-full bg-blue-700 flex items-center justify-center">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="14"
-                              height="14"
-                              viewBox="0 0 24 24"
-                              fill="white"
-                              stroke="white"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="lucide lucide-linkedin"
-                            >
-                              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                              <rect width="4" height="12" x="2" y="9"></rect>
-                              <circle cx="4" cy="4" r="2"></circle>
-                            </svg>
-                          </div>
-                        </motion.a>
-                      </div>
-                    </div>
+              <ScrollReveal direction="left" className="lg:col-span-2">
+                <div className="surface-card flex h-full flex-col p-8">
+                  <h3 className="mb-6 text-2xl font-semibold text-gray-900">Coordonnées</h3>
+                  <div className="space-y-5">
+                    {[
+                      { icon: <Building className="h-5 w-5" />, label: "Pulsar ICT", value: "CH-1219 Genève (Aïre)" },
+                      { icon: <Mail className="h-5 w-5" />, label: "Email", value: "info@pulsarvoip.ch" },
+                      { icon: <Phone className="h-5 w-5" />, label: "Téléphone", value: "+41 (0) 22 510 20 19" },
+                      { icon: <MapPin className="h-5 w-5" />, label: "Région", value: "Genève & alentours" },
+                    ].map((item) => (
+                      <motion.div
+                        key={item.label}
+                        className="group flex items-start gap-4"
+                        whileHover={{ x: 4 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-50 to-cyan-50 text-blue-700 ring-1 ring-blue-900/5 transition-transform group-hover:scale-110">
+                          {item.icon}
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-gray-900">{item.label}</h4>
+                          <p className="text-gray-600">{item.value}</p>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  <div className="mt-8 border-t border-blue-900/[0.06] pt-6">
+                    <h4 className="mb-4 font-semibold text-gray-900">Suivez-Nous</h4>
+                    <motion.a
+                      href="https://www.linkedin.com/company/pulsar-ict"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-blue-800 text-white shadow-sm transition-all hover:bg-blue-900 hover:shadow-md"
+                      whileHover={{ y: -4 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <span className="sr-only">LinkedIn</span>
+                      <Linkedin className="h-5 w-5" />
+                    </motion.a>
                   </div>
                 </div>
               </ScrollReveal>
@@ -481,25 +592,29 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 tech-gradient"></div>
+      <footer className="relative overflow-hidden bg-gray-950 py-14 text-white">
+        <div className="absolute inset-0 opacity-[0.08]">
+          <div className="tech-gradient absolute inset-0" />
         </div>
+        <div className="dot-grid absolute inset-0 opacity-20" />
 
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="container relative z-10 mx-auto px-4">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
             <div>
-              <motion.h3
-                className="text-xl font-bold mb-4"
+              <motion.div
+                className="mb-4 flex items-center gap-2.5"
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
               >
-                Pulsar
-              </motion.h3>
+                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-cyan-500 text-white">
+                  <Terminal className="h-5 w-5" />
+                </span>
+                <h3 className="font-heading text-xl font-bold">Pulsar</h3>
+              </motion.div>
               <motion.p
-                className="text-gray-400"
+                className="max-w-xs text-sm leading-relaxed text-gray-400"
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -508,9 +623,10 @@ export default function Home() {
                 Sécuriser votre avenir numérique avec des solutions innovantes d'IA et de cybersécurité.
               </motion.p>
             </div>
+
             <div>
               <motion.h4
-                className="text-lg font-semibold mb-4"
+                className="mb-4 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-gray-400"
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -518,31 +634,26 @@ export default function Home() {
               >
                 Liens Rapides
               </motion.h4>
-              <ul className="space-y-2">
-                {[
-                  { id: "home", fr: "Accueil" },
-                  { id: "about", fr: "À Propos" },
-                  { id: "services", fr: "Services" },
-                  { id: "references", fr: "Références" },
-                  { id: "contact", fr: "Contact" },
-                ].map((item, index) => (
+              <ul className="space-y-3">
+                {navItems.map((item, index) => (
                   <motion.li
                     key={item.id}
                     initial={{ opacity: 0, x: -10 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
+                    transition={{ duration: 0.5, delay: 0.3 + index * 0.08 }}
                   >
-                    <a href={`#${item.id}`} className="text-gray-400 hover:text-white transition-colors">
+                    <a href={`#${item.id}`} className="text-sm text-gray-400 transition-colors hover:text-cyan-300">
                       {item.fr}
                     </a>
                   </motion.li>
                 ))}
               </ul>
             </div>
+
             <div>
               <motion.h4
-                className="text-lg font-semibold mb-4"
+                className="mb-4 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-gray-400"
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -550,7 +661,7 @@ export default function Home() {
               >
                 Services
               </motion.h4>
-              <ul className="space-y-2">
+              <ul className="space-y-3">
                 {["Solutions IA", "Cybersécurité", "Infrastructure Cloud", "Conseil IT", "Développement Logiciel"].map(
                   (item, index) => (
                     <motion.li
@@ -558,9 +669,9 @@ export default function Home() {
                       initial={{ opacity: 0, x: -10 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
+                      transition={{ duration: 0.5, delay: 0.5 + index * 0.08 }}
                     >
-                      <a href="#services" className="text-gray-400 hover:text-white transition-colors">
+                      <a href="#services" className="text-sm text-gray-400 transition-colors hover:text-cyan-300">
                         {item}
                       </a>
                     </motion.li>
@@ -569,18 +680,19 @@ export default function Home() {
               </ul>
             </div>
           </div>
+
           <motion.div
-            className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400"
+            className="mt-10 flex flex-col items-center justify-between gap-2 border-t border-white/10 pt-8 text-center font-mono text-xs text-gray-500 sm:flex-row"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 1 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
           >
             <p>© {new Date().getFullYear()} Pulsar. Tous droits réservés.</p>
+            <p className="text-gray-600">CH-1219 Genève (Aïre)</p>
           </motion.div>
         </div>
       </footer>
     </div>
   )
 }
-

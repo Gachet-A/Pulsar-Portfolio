@@ -57,7 +57,7 @@ export default function ScrollReveal({ children, direction = "up", delay = 0, cl
       initial="hidden"
       animate={controls}
       variants={getDirectionVariants()}
-      transition={{ duration: 0.6, delay: delay, ease: "easeOut" }}
+      transition={{ duration: 0.6, delay: delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
     >
       {children}

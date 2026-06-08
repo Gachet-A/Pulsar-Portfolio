@@ -51,7 +51,7 @@ export default function ContactForm() {
   return (
     <motion.form
       onSubmit={handleSubmit}
-      className="space-y-6 bg-white p-6 rounded-lg shadow-sm"
+      className="space-y-6 bg-white p-6 rounded-lg shadow-sm border border-blue-900/10"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -68,7 +68,7 @@ export default function ContactForm() {
             onChange={handleChange}
             placeholder="Jean Dupont"
             required
-            className="w-full focus:ring-2 focus:ring-blue-700 transition-all duration-300"
+            className="w-full focus:ring-2 focus:ring-blue-800 transition-all duration-300"
           />
         </div>
         <div className="space-y-2">
@@ -83,7 +83,7 @@ export default function ContactForm() {
             onChange={handleChange}
             placeholder="jean@exemple.com"
             required
-            className="w-full focus:ring-2 focus:ring-blue-700 transition-all duration-300"
+            className="w-full focus:ring-2 focus:ring-blue-800 transition-all duration-300"
           />
         </div>
       </div>
@@ -98,7 +98,7 @@ export default function ContactForm() {
           value={formData.company}
           onChange={handleChange}
           placeholder="Votre Entreprise"
-          className="w-full focus:ring-2 focus:ring-blue-700 transition-all duration-300"
+          className="w-full focus:ring-2 focus:ring-blue-800 transition-all duration-300"
         />
       </div>
 
@@ -113,14 +113,14 @@ export default function ContactForm() {
           onChange={handleChange}
           placeholder="Comment pouvons-nous vous aider ?"
           required
-          className="w-full min-h-[150px] focus:ring-2 focus:ring-blue-700 transition-all duration-300"
+          className="w-full min-h-[150px] focus:ring-2 focus:ring-blue-800 transition-all duration-300"
         />
       </div>
 
       <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
         <Button
           type="submit"
-          className="w-full bg-blue-700 hover:bg-blue-800 transition-all duration-300"
+          className="w-full bg-blue-800 hover:bg-blue-900 transition-all duration-300"
           disabled={isSubmitting}
         >
           {isSubmitting ? (

@@ -1,7 +1,7 @@
 "use client"
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Quote } from "lucide-react"
+import type { MouseEvent } from "react"
+import { Quote, Star } from "lucide-react"
 import { motion } from "framer-motion"
 
 interface ReferenceCardProps {
@@ -11,40 +11,47 @@ interface ReferenceCardProps {
 }
 
 export default function ReferenceCard({ company, project, testimonial }: ReferenceCardProps) {
-  // Generate a random color for each card from tech-themed colors
-  const colors = [
-    { bg: "bg-blue-100", text: "text-blue-700" },
-    { bg: "bg-blue-100", text: "text-blue-800" },
-    { bg: "bg-teal-100", text: "text-teal-700" },
-    { bg: "bg-cyan-100", text: "text-cyan-700" },
-  ]
+  const initials = company
+    .split(" ")
+    .map((word) => word[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase()
 
-  const randomColor = colors[Math.floor(Math.random() * colors.length)]
+  const handleMove = (e: MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    e.currentTarget.style.setProperty("--mx", `${e.clientX - rect.left}px`)
+    e.currentTarget.style.setProperty("--my", `${e.clientY - rect.top}px`)
+  }
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      onMouseMove={handleMove}
+      initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ y: -8 }}
+      className="spotlight surface-card group relative flex h-full w-full flex-col p-7 transition-colors duration-300 hover:border-blue-300/60"
     >
-      <Card className="transition-all duration-300 border-gray-200 h-full shadow-sm">
-        <CardHeader className="pb-2 relative">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="text-xl font-semibold text-gray-900">{company}</h3>
-            <div className={`${randomColor.bg} p-2 rounded-full ${randomColor.text}`}>
-              <Quote className="h-5 w-5" />
-            </div>
-          </div>
-          <p className={`text-sm font-medium ${randomColor.text}`}>{project}</p>
+      <Quote className="absolute right-6 top-6 h-9 w-9 text-blue-100 transition-all duration-300 group-hover:scale-110 group-hover:text-blue-200" />
 
-          <div className="absolute top-0 right-0 w-32 h-32 -mr-16 -mt-16 rounded-full opacity-5 bg-blue-900" />
-        </CardHeader>
-        <CardContent>
-          <p className="text-gray-600 italic">"{testimonial}"</p>
-        </CardContent>
-      </Card>
+      <p className="label-mono mb-4 text-[0.65rem] text-blue-500/80">{project}</p>
+
+      <div className="mb-5 flex gap-0.5 text-amber-400">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <Star key={i} className="h-4 w-4 fill-current" />
+        ))}
+      </div>
+
+      <p className="relative z-10 mb-6 flex-1 text-[15px] leading-relaxed text-gray-700">"{testimonial}"</p>
+
+      <div className="flex items-center gap-3 border-t border-blue-900/[0.06] pt-5">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-700 to-blue-900 text-sm font-semibold text-white transition-transform duration-300 group-hover:scale-110">
+          {initials}
+        </div>
+        <h3 className="truncate font-semibold tracking-tight text-gray-900">{company}</h3>
+      </div>
     </motion.div>
   )
 }
-

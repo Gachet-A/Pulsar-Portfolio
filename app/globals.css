@@ -23,7 +23,7 @@
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 221.2 83.2% 53.3%;
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     /* Tech accent colors */
     --dark-blue: 215 100% 20%;
@@ -61,10 +61,51 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading;
   }
   html {
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background-color: rgba(8, 145, 178, 0.2);
+    color: #0a2342;
+  }
+}
+
+@layer components {
+  /* Monospace technical label — terminal / IT feel */
+  .label-mono {
+    @apply inline-flex items-center gap-2 font-mono text-xs font-medium uppercase tracking-[0.22em] text-blue-700;
+  }
+
+  /* Reusable glassy card surface */
+  .surface-card {
+    @apply rounded-2xl border border-blue-900/[0.08] bg-white shadow-[0_1px_3px_rgba(15,23,42,0.04),0_12px_32px_-12px_rgba(15,23,42,0.12)];
+  }
+
+  /* Cursor-following spotlight layer (driven by --mx / --my vars) */
+  .spotlight::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), rgba(8, 145, 178, 0.1), transparent 65%);
+  }
+  .spotlight:hover::before {
+    opacity: 1;
+  }
+  .spotlight-dark::before {
+    background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), rgba(56, 189, 248, 0.16), transparent 65%);
   }
 }
 
@@ -87,6 +128,29 @@
   }
 }
 
+/* Text gradient */
+.text-gradient {
+  background: linear-gradient(120deg, #1e40af 0%, #0891b2 55%, #0d9488 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Lighter text gradient for dark backgrounds */
+.text-gradient-light {
+  background: linear-gradient(120deg, #60a5fa 0%, #22d3ee 52%, #5eead4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Soft radial glow for hero / section backdrops */
+.hero-glow {
+  background:
+    radial-gradient(40rem 40rem at 75% 10%, rgba(8, 145, 178, 0.12), transparent 60%),
+    radial-gradient(45rem 45rem at 10% 90%, rgba(30, 64, 175, 0.12), transparent 60%);
+}
+
 /* Floating animation */
 .floating {
   animation: floating 6s ease-in-out infinite;
@@ -102,6 +166,15 @@
   100% {
     transform: translateY(0px);
   }
+}
+
+/* Subtle card hover lift */
+.card-hover {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 48px -20px rgba(14, 67, 119, 0.35);
 }
 
 /* Pulse animation */
@@ -123,9 +196,15 @@
 
 /* Grid overlay */
 .tech-grid {
-  background-size: 40px 40px;
-  background-image: linear-gradient(to right, rgba(30, 64, 175, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(30, 64, 175, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+  background-image: linear-gradient(to right, rgba(30, 64, 175, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30, 64, 175, 0.045) 1px, transparent 1px);
+}
+
+/* Dotted overlay used on dark sections */
+.dot-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 28px 28px;
 }
 
 /* Circuit lines */
@@ -145,3 +224,27 @@
   z-index: -1;
 }
 
+/* Marquee for trust/logos strip */
+.marquee {
+  animation: marquee 28s linear infinite;
+}
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating,
+  .pulse,
+  .tech-gradient,
+  .marquee {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}

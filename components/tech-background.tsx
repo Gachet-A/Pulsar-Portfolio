@@ -47,12 +47,12 @@ export default function TechBackground({ className = "" }: TechBackgroundProps) 
         // Sort points by x coordinate for smoother curves
         this.points.sort((a, b) => a.x - b.x)
 
-        // Tech-themed colors - shades of blue
+        // Tech-themed colors - darker shades of blue
         const colors = [
           "rgba(10, 35, 66, 0.4)", // Dark navy
           "rgba(14, 67, 119, 0.4)", // Dark blue
-          "rgba(18, 106, 143, 0.4)", // Teal blue
-          "rgba(12, 66, 113, 0.4)", // Medium blue
+          "rgba(30, 58, 138, 0.4)", // Blue-900
+          "rgba(30, 64, 175, 0.4)", // Blue-800
         ]
 
         this.color = colors[Math.floor(Math.random() * colors.length)]
@@ -139,9 +139,9 @@ export default function TechBackground({ className = "" }: TechBackgroundProps) 
         this.size = Math.random() * 3 + 1
 
         const colors = [
+          "rgba(30, 58, 138, 0.7)", // Blue-900
+          "rgba(30, 64, 175, 0.7)", // Blue-800
           "rgba(14, 67, 119, 0.7)", // Dark blue
-          "rgba(18, 106, 143, 0.7)", // Teal blue
-          "rgba(12, 66, 113, 0.7)", // Medium blue
         ]
 
         this.color = colors[Math.floor(Math.random() * colors.length)]
@@ -211,7 +211,7 @@ export default function TechBackground({ className = "" }: TechBackgroundProps) 
 
       const gridSize = 40
 
-      ctx.strokeStyle = "rgba(30, 64, 175, 0.05)" // Light blue color
+      ctx.strokeStyle = "rgba(30, 64, 175, 0.05)" // Blue-800 color with low opacity
       ctx.lineWidth = 1
 
       // Draw vertical lines
