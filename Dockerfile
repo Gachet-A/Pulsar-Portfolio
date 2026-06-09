@@ -5,7 +5,7 @@ FROM node:22-alpine AS deps
 # libc6-compat helps some native deps run on Alpine
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json .npmrc ./
 RUN npm ci
 
 # ---- Builder ----
