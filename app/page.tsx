@@ -130,7 +130,7 @@ function SectionLabel({ number, children, light = false }: { number: string; chi
         light ? "text-white" : "text-gray-900"
       }`}
     >
-      <span className={`font-mono text-lg font-medium md:text-xl ${light ? "text-cyan-300" : "text-blue-700"}`}>
+      <span className={`font-mono text-lg font-medium md:text-xl ${light ? "text-blue-400" : "text-blue-700"}`}>
         {number}
       </span>
       {children}
