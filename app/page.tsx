@@ -51,31 +51,79 @@ const services = [
     description:
       "Implémentation d'IA personnalisée pour automatiser les processus et obtenir des insights à partir de vos données.",
     icon: <Code className="h-6 w-6" />,
+    details:
+      "Nous concevons et déployons des solutions d'intelligence artificielle sur mesure pour votre PME. De l'automatisation des tâches répétitives à l'analyse prédictive, nous transformons vos données en véritable avantage concurrentiel — sans complexité inutile.",
+    features: [
+      "Automatisation des processus métier répétitifs",
+      "Assistants et chatbots intelligents",
+      "Analyse prédictive et tableaux de bord",
+      "Intégration à vos outils existants (Microsoft 365, ERP)",
+    ],
   },
   {
     title: "Cybersécurité",
     description: "Audits de sécurité complets, détection des menaces et systèmes de protection.",
     icon: <Shield className="h-6 w-6" />,
+    details:
+      "Protégez votre entreprise contre les menaces actuelles. Nous évaluons votre exposition, déployons des défenses multicouches et formons vos collaborateurs afin de réduire durablement votre surface d'attaque.",
+    features: [
+      "Audit de sécurité et tests d'intrusion",
+      "Protection des postes et serveurs (EDR)",
+      "Sécurisation de la messagerie et anti-phishing",
+      "Sensibilisation et formation des équipes",
+    ],
   },
   {
     title: "Infrastructure Cloud",
     description: "Solutions cloud sécurisées et évolutives conçues pour les besoins de votre entreprise.",
     icon: <Server className="h-6 w-6" />,
+    details:
+      "Migrez vers le cloud en toute confiance. Nous concevons des architectures évolutives, sécurisées et maîtrisées côté coûts, avec un hébergement en Suisse lorsque vos exigences de conformité le demandent.",
+    features: [
+      "Migration vers Microsoft Azure et Microsoft 365",
+      "Sauvegarde et plan de reprise d'activité (PRA)",
+      "Hébergement souverain en Suisse",
+      "Optimisation continue des coûts cloud",
+    ],
   },
   {
     title: "Conseil IT",
     description: "Planification technologique stratégique et accompagnement dans la transformation digitale.",
     icon: <Users className="h-6 w-6" />,
+    details:
+      "Un accompagnement stratégique pour aligner votre informatique sur vos objectifs d'affaires. Nous établissons une feuille de route claire et pilotons votre transformation digitale, à votre rythme.",
+    features: [
+      "Audit de l'existant et feuille de route IT",
+      "Budgétisation et planification technologique",
+      "Gestion de projets et des fournisseurs",
+      "Direction informatique externalisée (vCIO)",
+    ],
   },
   {
     title: "Développement Logiciel",
     description: "Solutions logicielles personnalisées conçues avec sécurité et évolutivité.",
     icon: <Code className="h-6 w-6" />,
+    details:
+      "Des applications sur mesure pensées pour votre métier. Nous développons des solutions sécurisées, maintenables et évolutives, du portail web aux intégrations internes les plus exigeantes.",
+    features: [
+      "Applications web et portails métier",
+      "Intégrations et API sur mesure",
+      "Sécurité intégrée dès la conception",
+      "Maintenance et évolutions continues",
+    ],
   },
   {
     title: "Support 24/7",
     description: "Support technique et surveillance de vos systèmes 24h/24 et 7j/7.",
     icon: <CheckCircle className="h-6 w-6" />,
+    details:
+      "Une équipe de proximité disponible jour et nuit. Nous surveillons vos systèmes en continu et intervenons rapidement, à distance ou sur site dans la région genevoise.",
+    features: [
+      "Supervision proactive 24h/24 et 7j/7",
+      "Helpdesk réactif (téléphone et email)",
+      "Interventions sur site à Genève et alentours",
+      "Temps de réponse garantis par SLA",
+    ],
   },
 ]
 
@@ -126,13 +174,11 @@ const aboutPoints = [
 function SectionLabel({ number, children, light = false }: { number: string; children: string; light?: boolean }) {
   return (
     <h2
-      className={`inline-flex items-baseline gap-3 font-heading text-4xl font-bold tracking-tight md:text-5xl ${
-        light ? "text-white" : "text-gray-900"
+      className={`inline-flex items-baseline gap-3 font-mono text-xl font-medium md:text-2xl ${
+        light ? "text-blue-400" : "text-blue-700"
       }`}
     >
-      <span className={`font-mono text-lg font-medium md:text-xl ${light ? "text-blue-400" : "text-blue-700"}`}>
-        {number}
-      </span>
+      <span>{number}</span>
       {children}
     </h2>
   )
@@ -225,14 +271,16 @@ export default function Home() {
           <div className="hidden md:block">
             <Button
               onClick={handleScrollToContact}
-              className={`group transition-all ${
-                scrolled
-                  ? "bg-blue-800 text-white shadow-sm hover:bg-blue-900 hover:shadow-md"
-                  : "bg-white text-blue-900 shadow-md hover:bg-blue-50"
-              }`}
+              className="group relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-700 to-cyan-600 text-white shadow-lg shadow-blue-900/20 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-900/30"
             >
-              Contactez-Nous
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
+              />
+              <span className="relative z-10 flex items-center">
+                Contactez-Nous
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </span>
             </Button>
           </div>
 
@@ -333,20 +381,28 @@ export default function Home() {
                 <Button
                   size="lg"
                   onClick={handleScrollToContact}
-                  className="group bg-white text-blue-900 shadow-lg transition-all hover:bg-blue-50 hover:shadow-xl"
+                  className="group relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-cyan-900/30 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-500/40"
                 >
-                  Contactez-Nous
-                  <Mail className="ml-2 h-4 w-4 transition-transform group-hover:-translate-y-0.5" />
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
+                  />
+                  <span className="relative z-10 flex items-center">
+                    Contactez-Nous
+                    <Mail className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5" />
+                  </span>
                 </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="group border-white/30 bg-white/5 text-white backdrop-blur-sm transition-all hover:border-white/60 hover:bg-white/10"
+                <button
+                  type="button"
                   onClick={handleScrollToAbout}
+                  className="group relative inline-flex h-11 rounded-xl bg-gradient-to-r from-blue-500/60 to-cyan-400/60 p-px shadow-lg shadow-blue-950/20 outline-none transition-all duration-300 hover:from-blue-400 hover:to-cyan-300 focus-visible:ring-2 focus-visible:ring-cyan-400/60"
                 >
-                  En Savoir Plus
-                  <ChevronDown className="ml-2 h-4 w-4 transition-transform group-hover:translate-y-0.5" />
-                </Button>
+                  <span className="flex h-full items-center gap-2 rounded-[11px] bg-blue-950/50 px-7 text-sm font-medium text-white backdrop-blur-sm transition-colors duration-300 group-hover:bg-blue-950/20">
+                    <span className="font-mono text-xs text-cyan-300 transition-colors group-hover:text-cyan-200">./</span>
+                    En Savoir Plus
+                    <ChevronDown className="h-4 w-4 transition-transform duration-300 group-hover:translate-y-1" />
+                  </span>
+                </button>
               </motion.div>
 
               <motion.div
@@ -505,6 +561,8 @@ export default function Home() {
                   index={index}
                   title={service.title}
                   description={service.description}
+                  details={service.details}
+                  features={service.features}
                   icon={service.icon}
                   darkMode
                 />
