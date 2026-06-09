@@ -26,6 +26,11 @@ export const metadata: Metadata = {
   description:
     "Pulsar ICT accompagne les PME de la région genevoise avec des services informatiques managés, de la cybersécurité et des solutions d'IA.",
   generator: 'Pulsar ICT',
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
+  },
 }
 
 export default function RootLayout({

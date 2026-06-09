@@ -15,7 +15,6 @@ import {
   ArrowRight,
   MapPin,
   Phone,
-  Terminal,
   Linkedin,
 } from "lucide-react"
 import { motion, useScroll, useSpring, useTransform } from "framer-motion"
@@ -27,6 +26,17 @@ import ScrollReveal from "@/components/scroll-reveal"
 import ParallaxSection from "@/components/parallax-section"
 import TechBackground from "@/components/tech-background"
 import CountUp from "@/components/count-up"
+
+const logoMask = {
+  WebkitMaskImage: "url(/Pulsar_Full_logo.svg)",
+  maskImage: "url(/Pulsar_Full_logo.svg)",
+  WebkitMaskRepeat: "no-repeat",
+  maskRepeat: "no-repeat",
+  WebkitMaskSize: "contain",
+  maskSize: "contain",
+  WebkitMaskPosition: "left center",
+  maskPosition: "left center",
+} as const
 
 const navItems = [
   { id: "home", fr: "Accueil" },
@@ -229,18 +239,17 @@ export default function Home() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="group flex items-center gap-2.5"
+            className="group flex items-center"
+            aria-label="Pulsar — Accueil"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-blue-700 to-blue-900 text-white shadow-sm transition-transform duration-300 group-hover:rotate-12">
-              <Terminal className="h-5 w-5" />
-            </span>
             <span
-              className={`font-heading text-xl font-bold tracking-tight transition-colors ${
-                scrolled ? "text-blue-900" : "text-white"
+              aria-hidden
+              className={`block h-9 w-[76px] transition-colors duration-300 group-hover:opacity-90 ${
+                scrolled ? "bg-blue-800" : "bg-white"
               }`}
-            >
-              Pulsar
-            </span>
+              style={logoMask}
+            />
+            <span className="sr-only">Pulsar</span>
           </motion.a>
 
           <nav className="hidden items-center gap-8 md:flex">
@@ -679,16 +688,14 @@ export default function Home() {
           <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
             <div>
               <motion.div
-                className="mb-4 flex items-center gap-2.5"
+                className="mb-4"
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
               >
-                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-cyan-500 text-white">
-                  <Terminal className="h-5 w-5" />
-                </span>
-                <h3 className="font-heading text-xl font-bold">Pulsar</h3>
+                <span aria-hidden className="block h-9 w-[76px] bg-white" style={logoMask} />
+                <span className="sr-only">Pulsar</span>
               </motion.div>
               <motion.p
                 className="max-w-xs text-sm leading-relaxed text-gray-400"
