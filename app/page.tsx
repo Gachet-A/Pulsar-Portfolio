@@ -244,7 +244,7 @@ export default function Home() {
           >
             <span
               aria-hidden
-              className={`block h-9 w-[76px] transition-colors duration-300 group-hover:opacity-90 ${
+              className={`block h-10 w-[84px] transition-colors duration-300 group-hover:opacity-90 ${
                 scrolled ? "bg-blue-800" : "bg-white"
               }`}
               style={logoMask}
@@ -694,7 +694,7 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
               >
-                <span aria-hidden className="block h-9 w-[76px] bg-white" style={logoMask} />
+                <span aria-hidden className="block h-12 w-[101px] bg-white" style={logoMask} />
                 <span className="sr-only">Pulsar</span>
               </motion.div>
               <motion.p
