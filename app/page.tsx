@@ -21,7 +21,6 @@ import { motion, useScroll, useSpring, useTransform } from "framer-motion"
 import MobileMenu from "@/components/mobile-menu"
 import ContactForm from "@/components/contact-form"
 import ServiceCard from "@/components/service-card"
-import ReferenceCard from "@/components/reference-card"
 import ScrollReveal from "@/components/scroll-reveal"
 import ParallaxSection from "@/components/parallax-section"
 import TechBackground from "@/components/tech-background"
@@ -42,7 +41,8 @@ const navItems = [
   { id: "home", fr: "Accueil" },
   { id: "about", fr: "À Propos" },
   { id: "services", fr: "Services" },
-  { id: "references", fr: "Références" },
+  { id: "approche", fr: "Approche" },
+  { id: "pourquoi", fr: "Pourquoi" },
   { id: "contact", fr: "Contact" },
 ]
 
@@ -52,7 +52,7 @@ const marqueeItems = [
   "Infrastructure Cloud",
   "Conseil IT",
   "Développement Logiciel",
-  "Support 24/7",
+  "Support réactif",
 ]
 
 const services = [
@@ -123,13 +123,13 @@ const services = [
     ],
   },
   {
-    title: "Support 24/7",
-    description: "Support technique et surveillance de vos systèmes 24h/24 et 7j/7.",
+    title: "Support réactif",
+    description: "Support technique et surveillance réactive de vos systèmes.",
     icon: <CheckCircle className="h-6 w-6" />,
     details:
       "Une équipe de proximité disponible jour et nuit. Nous surveillons vos systèmes en continu et intervenons rapidement, à distance ou sur site dans la région genevoise.",
     features: [
-      "Supervision proactive 24h/24 et 7j/7",
+      "Supervision proactive de vos systèmes",
       "Helpdesk réactif (téléphone et email)",
       "Interventions sur site à Genève et alentours",
       "Temps de réponse garantis par SLA",
@@ -137,40 +137,49 @@ const services = [
   },
 ]
 
-const references = [
+const approcheSteps = [
   {
-    company: "TechCorp Inc.",
-    project: "Système de Sécurité Alimenté par l'IA",
-    testimonial: "Pulsar a transformé notre infrastructure de sécurité avec leurs solutions d'IA innovantes.",
+    title: "Écoute & Audit",
+    desc: "Nous analysons votre infrastructure, vos usages et vos objectifs pour identifier les vraies priorités.",
   },
   {
-    company: "Global Finance",
-    project: "Migration Cloud Sécurisée",
-    testimonial:
-      "L'équipe de Pulsar a assuré la protection de nos données financières sensibles tout au long de notre transition vers le cloud.",
+    title: "Conception",
+    desc: "Nous élaborons une solution sur mesure, sécurisée et pensée pour votre budget.",
   },
   {
-    company: "HealthTech Solutions",
-    project: "Systèmes Conformes RGPD",
-    testimonial:
-      "L'expertise de Pulsar dans les réglementations de sécurité des soins de santé a été inestimable pour nos besoins de conformité.",
+    title: "Déploiement",
+    desc: "Nous mettons en œuvre la solution avec un minimum d'interruption pour vos équipes.",
   },
   {
-    company: "E-commerce Géant",
-    project: "Système de Détection de Fraude",
-    testimonial: "La solution d'IA développée par Pulsar a réduit nos incidents de fraude de 87% au premier trimestre.",
+    title: "Support & Suivi",
+    desc: "Nous assurons un accompagnement continu et une supervision proactive de vos systèmes.",
+  },
+]
+
+const whyPulsar = [
+  {
+    image: "https://images.unsplash.com/photo-1633022326182-1b36700bc49a?auto=format&fit=crop&w=800&q=70",
+    alt: "Le Jet d'Eau de Genève",
+    title: "Proximité genevoise",
+    desc: "Une équipe locale et réactive, qui intervient à distance comme sur site à Genève et alentours.",
   },
   {
-    company: "Agence Gouvernementale",
-    project: "Protection des Infrastructures Critiques",
-    testimonial:
-      "Les protocoles de cybersécurité de Pulsar dépassent nos exigences strictes pour les systèmes de sécurité nationale.",
+    image: "https://images.unsplash.com/photo-1553775282-20af80779df7?auto=format&fit=crop&w=800&q=70",
+    alt: "Casque de support et poste de travail",
+    title: "Réactivité",
+    desc: "Des temps de réponse garantis par SLA et un support réactif.",
   },
   {
-    company: "Institution Éducative",
-    project: "Plateforme d'Apprentissage Sécurisée",
-    testimonial:
-      "Les données de nos étudiants et de notre corps enseignant n'ont jamais été aussi sécurisées grâce à l'approche globale de Pulsar.",
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=70",
+    alt: "Technicienne travaillant sur du matériel informatique",
+    title: "Expertise éprouvée",
+    desc: "Plus de 20 ans d'expérience en cybersécurité, cloud et infrastructure informatique.",
+  },
+  {
+    image: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=800&q=70",
+    alt: "Baie réseau et câblage",
+    title: "Données en Suisse",
+    desc: "Hébergement souverain et conformité aux exigences suisses de protection des données.",
   },
 ]
 
@@ -424,7 +433,7 @@ export default function Home() {
                   <CheckCircle className="h-4 w-4 text-cyan-400" /> Experts certifiés
                 </span>
                 <span className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-cyan-400" /> Support 24/7
+                  <CheckCircle className="h-4 w-4 text-cyan-400" /> Support réactif
                 </span>
                 <span className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-cyan-400" /> Proximité genevoise
@@ -500,7 +509,7 @@ export default function Home() {
                       transition={{ duration: 0.5, delay: 0.3 }}
                     >
                       <p className="font-heading text-3xl font-bold text-gradient">
-                        <CountUp to={19} suffix="+" /> ans
+                        <CountUp to={20} suffix="+" /> ans
                       </p>
                       <p className="font-mono text-xs uppercase tracking-wider text-gray-500">d'expertise IT</p>
                     </motion.div>
@@ -513,7 +522,7 @@ export default function Home() {
                 <h3 className="mb-3 mt-5 text-xl font-semibold text-gray-900">Notre Mission</h3>
                 <p className="mb-8 leading-relaxed text-gray-600">
                   Chez Pulsar, nous nous consacrons à renforcer les entreprises grâce à des solutions technologiques
-                  innovantes. Fondée en 2007, notre entreprise est passée d'une petite équipe d'experts en cybersécurité
+                  innovantes. Fondée en 2006, notre entreprise est passée d'une petite équipe d'experts en cybersécurité
                   à un fournisseur complet de solutions informatiques spécialisé dans l'intégration de l'IA et les
                   protocoles de sécurité avancés.
                 </p>
@@ -580,29 +589,128 @@ export default function Home() {
           </div>
         </section>
 
-        {/* References Section */}
-        <section id="references" className="relative overflow-hidden bg-gray-50/80 py-20 md:py-28">
+        {/* Approach Section */}
+        <section id="approche" className="relative overflow-hidden bg-gray-50/80 py-20 md:py-28">
           <div className="absolute inset-0 tech-grid opacity-70" />
           <div className="absolute inset-0 bg-gradient-to-br from-blue-900/[0.03] to-cyan-800/[0.03]" />
 
           <div className="container relative z-10 mx-auto px-4">
             <ScrollReveal>
               <div className="mx-auto mb-14 flex max-w-2xl flex-col items-center text-center">
-                <SectionLabel number="// 03">Nos Références</SectionLabel>
+                <SectionLabel number="// 03">Notre Approche</SectionLabel>
                 <p className="mt-4 text-gray-600">
-                  Nous avons eu le privilège de travailler avec des entreprises de premier plan dans divers secteurs.
+                  Une méthode claire et éprouvée, de la première rencontre au support continu, pour des projets
+                  maîtrisés de bout en bout.
                 </p>
               </div>
             </ScrollReveal>
 
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {references.map((reference, index) => (
-                <ScrollReveal key={reference.company} delay={index * 0.08}>
-                  <ReferenceCard
-                    company={reference.company}
-                    project={reference.project}
-                    testimonial={reference.testimonial}
-                  />
+            <div className="mx-auto max-w-3xl">
+              {approcheSteps.map((step, index) => {
+                const isLeft = index % 2 === 0
+                const isLast = index === approcheSteps.length - 1
+                return (
+                  <div
+                    key={step.title}
+                    className="group grid cursor-default grid-cols-[auto_1fr] gap-x-6 md:grid-cols-[1fr_auto_1fr] md:gap-x-12"
+                  >
+                    {/* Center rail: node + connecting line share one flex column,
+                        so the line always runs through the middle of every circle */}
+                    <div className="col-start-1 row-start-1 flex flex-col items-center md:col-start-2">
+                      <motion.div
+                        initial={{ scale: 0, opacity: 0 }}
+                        whileInView={{ scale: 1, opacity: 1 }}
+                        viewport={{ once: true, amount: 0.8 }}
+                        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                        className="relative shrink-0 transition-transform duration-300 ease-out group-hover:scale-110"
+                      >
+                        {/* Soft glow on hover */}
+                        <span className="absolute -inset-2 rounded-full bg-blue-500/30 opacity-0 blur-md transition-opacity duration-500 group-hover:opacity-100" />
+                        <span className="relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-blue-900 font-mono text-lg font-semibold text-white shadow-lg shadow-blue-900/25 ring-4 ring-white/70 transition-shadow duration-300 group-hover:shadow-xl group-hover:shadow-blue-900/40">
+                          0{index + 1}
+                        </span>
+                      </motion.div>
+                      {!isLast && <div className="w-px flex-1 bg-gradient-to-b from-blue-300 to-cyan-300" />}
+                    </div>
+
+                    {/* Content: right of the node on mobile; alternating sides on desktop */}
+                    <div
+                      className={`col-start-2 row-start-1 pb-14 pt-1.5 md:pb-16 ${
+                        isLeft ? "md:col-start-1 md:pr-12 md:text-right" : "md:col-start-3 md:pl-12"
+                      }`}
+                    >
+                      <ScrollReveal direction={isLeft ? "right" : "left"}>
+                        <div
+                          className={`transition-transform duration-300 ease-out ${
+                            isLeft ? "group-hover:translate-x-1.5" : "group-hover:-translate-x-1.5"
+                          }`}
+                        >
+                          <p className="label-mono mb-2 text-[0.7rem] text-blue-500/80 transition-colors duration-300 group-hover:text-blue-600">
+                            Étape 0{index + 1}
+                          </p>
+                          <h3 className="mb-2 text-xl font-semibold tracking-tight text-gray-900 transition-colors duration-300 group-hover:text-blue-700">
+                            {step.title}
+                          </h3>
+                          <p className="leading-relaxed text-gray-600">{step.desc}</p>
+                        </div>
+                      </ScrollReveal>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* Why Pulsar Section */}
+        <section id="pourquoi" className="relative overflow-hidden py-20 md:py-28">
+          <div className="absolute inset-0 tech-grid opacity-40" />
+
+          <div className="container relative z-10 mx-auto px-4">
+            <ScrollReveal>
+              <div className="mx-auto mb-14 flex max-w-2xl flex-col items-center text-center">
+                <SectionLabel number="// 04">Pourquoi Pulsar</SectionLabel>
+                <p className="mt-4 text-gray-600">
+                  Un partenaire IT de proximité, engagé sur la durée et à vos côtés à chaque étape.
+                </p>
+              </div>
+            </ScrollReveal>
+
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {whyPulsar.map((item, index) => (
+                <ScrollReveal key={item.title} delay={index * 0.08}>
+                  <motion.div
+                    whileHover={{ y: -8 }}
+                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    className="surface-card group flex h-full flex-col overflow-hidden transition-colors duration-300 hover:border-blue-300/60 hover:shadow-[0_1px_3px_rgba(15,23,42,0.04),0_24px_48px_-16px_rgba(30,64,175,0.25)]"
+                  >
+                    {/* Top image */}
+                    <div className="relative h-40 w-full overflow-hidden">
+                      <img
+                        src={item.image}
+                        alt={item.alt}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-[700ms] ease-out group-hover:scale-[1.12]"
+                      />
+                      {/* Blue duotone filter — lightens on hover so the photo comes alive */}
+                      <div className="absolute inset-0 bg-blue-800/55 mix-blend-multiply transition-opacity duration-500 group-hover:opacity-50" />
+                      {/* Depth gradient for legibility */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-blue-950/80 via-blue-900/20 to-transparent" />
+                      {/* Cyan sheen on hover */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-cyan-400/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                      <span className="label-mono absolute bottom-3 left-4 text-[0.6rem] text-white/90">
+                        0{index + 1}
+                      </span>
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex flex-1 flex-col p-6">
+                      <h3 className="mb-2 font-semibold tracking-tight text-gray-900 transition-colors duration-300 group-hover:text-blue-700">
+                        {item.title}
+                      </h3>
+                      <p className="text-sm leading-relaxed text-gray-600">{item.desc}</p>
+                    </div>
+                  </motion.div>
                 </ScrollReveal>
               ))}
             </div>
@@ -617,7 +725,7 @@ export default function Home() {
           <div className="container relative z-10 mx-auto px-4">
             <ScrollReveal>
               <div className="mx-auto mb-14 flex max-w-2xl flex-col items-center text-center">
-                <SectionLabel number="// 04">Contact</SectionLabel>
+                <SectionLabel number="// 05">Contact</SectionLabel>
                 <p className="mt-4 text-gray-600">
                   Prêt à sécuriser votre avenir numérique ? Entrez en contact avec notre équipe d'experts.
                 </p>

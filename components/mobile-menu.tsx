@@ -14,7 +14,8 @@ export default function MobileMenu() {
     { en: "Home", fr: "Accueil" },
     { en: "About", fr: "À Propos" },
     { en: "Services", fr: "Services" },
-    { en: "References", fr: "Références" },
+    { en: "Approche", fr: "Approche" },
+    { en: "Pourquoi", fr: "Pourquoi" },
     { en: "Contact", fr: "Contact" },
   ]
 
