@@ -45,8 +45,8 @@ export default function ConfidentialitePage() {
           Avec votre accord, nous utilisons des outils de mesure d'audience pour comprendre l'utilisation du site et
           l'améliorer. Aucun de ces cookies n'est déposé tant que vous n'avez pas cliqué sur « Accepter ».
         </p>
-        <div className="overflow-hidden rounded-xl border border-blue-900/[0.08]">
-          <table className="w-full text-left text-sm">
+        <div className="overflow-x-auto rounded-xl border border-blue-900/[0.08]">
+          <table className="w-full min-w-[480px] text-left text-sm">
             <thead className="bg-gray-50 text-gray-700">
               <tr>
                 <th className="p-3 font-semibold">Outil</th>

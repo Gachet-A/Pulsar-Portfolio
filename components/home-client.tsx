@@ -258,7 +258,7 @@ export default function HomeClient({ featuredPosts }: { featuredPosts: FeaturedP
                 </span>
               </motion.div>
 
-              <h1 className="font-heading text-4xl font-bold leading-[1.06] tracking-tight text-white md:text-6xl lg:text-[4.2rem]">
+              <h1 className="font-heading text-3xl font-bold leading-[1.08] tracking-tight text-white sm:text-4xl md:text-6xl lg:text-[4.2rem]">
                 {"Sécuriser Votre Avenir ".split(" ").map((word, i) => (
                   <motion.span
                     key={i}
@@ -312,13 +312,13 @@ export default function HomeClient({ featuredPosts }: { featuredPosts: FeaturedP
                 <Button
                   size="lg"
                   onClick={handleScrollToContact}
-                  className="group relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-cyan-900/30 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-500/40"
+                  className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-cyan-900/30 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-500/40 sm:w-auto"
                 >
                   <span
                     aria-hidden
                     className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
                   />
-                  <span className="relative z-10 flex items-center">
+                  <span className="relative z-10 flex items-center justify-center">
                     Contactez-Nous
                     <Mail className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5" />
                   </span>
@@ -326,9 +326,9 @@ export default function HomeClient({ featuredPosts }: { featuredPosts: FeaturedP
                 <button
                   type="button"
                   onClick={handleScrollToAbout}
-                  className="group relative inline-flex h-11 rounded-xl bg-gradient-to-r from-blue-500/60 to-cyan-400/60 p-px shadow-lg shadow-blue-950/20 outline-none transition-all duration-300 hover:from-blue-400 hover:to-cyan-300 focus-visible:ring-2 focus-visible:ring-cyan-400/60"
+                  className="group relative flex h-11 w-full rounded-xl bg-gradient-to-r from-blue-500/60 to-cyan-400/60 p-px shadow-lg shadow-blue-950/20 outline-none transition-all duration-300 hover:from-blue-400 hover:to-cyan-300 focus-visible:ring-2 focus-visible:ring-cyan-400/60 sm:inline-flex sm:w-auto"
                 >
-                  <span className="flex h-full items-center gap-2 rounded-[11px] bg-blue-950/50 px-7 text-sm font-medium text-white backdrop-blur-sm transition-colors duration-300 group-hover:bg-blue-950/20">
+                  <span className="flex h-full w-full items-center justify-center gap-2 rounded-[11px] bg-blue-950/50 px-7 text-sm font-medium text-white backdrop-blur-sm transition-colors duration-300 group-hover:bg-blue-950/20">
                     <span className="font-mono text-xs text-cyan-300 transition-colors group-hover:text-cyan-200">./</span>
                     En Savoir Plus
                     <ChevronDown className="h-4 w-4 transition-transform duration-300 group-hover:translate-y-1" />
@@ -410,12 +410,12 @@ export default function HomeClient({ featuredPosts }: { featuredPosts: FeaturedP
                       <img
                         src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1100&q=80"
                         alt="L'équipe d'experts Pulsar"
-                        className="h-[440px] w-full object-cover"
+                        className="h-64 w-full object-cover sm:h-80 lg:h-[440px]"
                       />
                     </motion.div>
 
                     <motion.div
-                      className="absolute -bottom-6 -right-4 rounded-2xl border border-blue-900/[0.06] bg-white px-6 py-4 shadow-xl sm:-right-6"
+                      className="absolute -bottom-4 -right-2 rounded-2xl border border-blue-900/[0.06] bg-white px-5 py-3 shadow-xl sm:-bottom-6 sm:-right-6 sm:px-6 sm:py-4"
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
@@ -432,7 +432,7 @@ export default function HomeClient({ featuredPosts }: { featuredPosts: FeaturedP
 
               <ScrollReveal direction="left">
                 <SectionLabel number="// 01">À Propos</SectionLabel>
-                <h3 className="mb-3 mt-5 text-xl font-semibold text-gray-900">Notre Mission</h3>
+                <h3 className="mb-3 mt-5 text-lg font-semibold text-gray-900 sm:text-xl">Notre Mission</h3>
                 <p className="mb-8 leading-relaxed text-gray-600">
                   Chez Pulsar, nous nous consacrons à renforcer les entreprises grâce à des solutions technologiques
                   innovantes. Fondée en 2006, notre entreprise est passée d'une petite équipe d'experts en cybersécurité

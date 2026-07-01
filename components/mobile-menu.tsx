@@ -138,7 +138,7 @@ export default function MobileMenu() {
                   <motion.div key={item.id} variants={itemVariants} className="w-full" custom={index}>
                     <Button
                       variant="ghost"
-                      className="w-full text-3xl py-8 justify-start text-gray-800 hover:text-blue-800 hover:bg-blue-50 transition-all duration-300 transform hover:translate-x-2"
+                      className="w-full text-2xl sm:text-3xl py-5 sm:py-7 justify-start text-gray-800 hover:text-blue-800 hover:bg-blue-50 transition-all duration-300 transform hover:translate-x-2"
                       onClick={() => handleNavigation(item)}
                     >
                       <span
