@@ -29,23 +29,40 @@ export default function ContactForm() {
     e.preventDefault()
     setIsSubmitting(true)
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
 
-    toast({
-      title: "Message envoyé !",
-      description: "Nous vous répondrons dans les plus brefs délais.",
-      duration: 5000,
-    })
+      if (!res.ok) {
+        const data = await res.json().catch(() => null)
+        throw new Error(data?.error ?? "L'envoi a échoué.")
+      }
 
-    setFormData({
-      name: "",
-      email: "",
-      company: "",
-      message: "",
-    })
+      toast({
+        title: "Message envoyé !",
+        description: "Nous vous répondrons dans les plus brefs délais.",
+        duration: 5000,
+      })
 
-    setIsSubmitting(false)
+      setFormData({
+        name: "",
+        email: "",
+        company: "",
+        message: "",
+      })
+    } catch (err) {
+      toast({
+        variant: "destructive",
+        title: "Échec de l'envoi",
+        description: err instanceof Error ? err.message : "Veuillez réessayer plus tard.",
+        duration: 6000,
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (

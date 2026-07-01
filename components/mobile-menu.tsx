@@ -1,30 +1,28 @@
 "use client"
 
 import { useState } from "react"
+import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { navItems, navHref, type NavItem } from "@/lib/nav"
 
 export default function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false)
+  const pathname = usePathname()
 
   const toggleMenu = () => setIsOpen(!isOpen)
 
-  const menuItems = [
-    { en: "Home", fr: "Accueil" },
-    { en: "About", fr: "À Propos" },
-    { en: "Services", fr: "Services" },
-    { en: "Approche", fr: "Approche" },
-    { en: "Pourquoi", fr: "Pourquoi" },
-    { en: "Contact", fr: "Contact" },
-  ]
+  const menuItems = navItems
 
-  const handleNavigation = (item: string) => {
-    const element = document.getElementById(item.toLowerCase())
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-      setIsOpen(false)
+  const handleNavigation = (item: NavItem) => {
+    setIsOpen(false)
+    // In-page section on the homepage: smooth-scroll without navigating.
+    if (!item.href && pathname === "/") {
+      document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" })
+      return
     }
+    window.location.href = navHref(item)
   }
 
   const menuVariants = {
@@ -137,11 +135,11 @@ export default function MobileMenu() {
             <div className="container mx-auto px-4 h-full flex flex-col justify-center">
               <div className="flex flex-col items-center space-y-6 py-8">
                 {menuItems.map((item, index) => (
-                  <motion.div key={item.en} variants={itemVariants} className="w-full" custom={index}>
+                  <motion.div key={item.id} variants={itemVariants} className="w-full" custom={index}>
                     <Button
                       variant="ghost"
                       className="w-full text-3xl py-8 justify-start text-gray-800 hover:text-blue-800 hover:bg-blue-50 transition-all duration-300 transform hover:translate-x-2"
-                      onClick={() => handleNavigation(item.en.toLowerCase())}
+                      onClick={() => handleNavigation(item)}
                     >
                       <span
                         className={`inline-block w-8 h-8 mr-4 rounded-full ${colors[index % colors.length]}`}

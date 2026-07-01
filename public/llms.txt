@@ -1,0 +1,39 @@
+# Pulsar ICT
+
+> Partenaire informatique de proximité pour les PME de Genève et de Suisse romande depuis 2006 : infogérance, cybersécurité, téléphonie d'entreprise (VoIP), infrastructure cloud et solutions d'intelligence artificielle.
+
+Pulsar ICT (aussi connu sous Pulsar VoIP) est une entreprise informatique basée à Genève (Aïre, 1219). Elle accompagne les petites et moyennes entreprises dans la gestion, la sécurisation et la modernisation de leur informatique, avec un support réactif et un hébergement des données en Suisse.
+
+## Services
+
+- **Infogérance et support informatique** : gestion et supervision proactive de votre parc informatique, helpdesk et interventions sur site à Genève et alentours.
+- **Cybersécurité** : audit de sécurité, tests d'intrusion, protection des postes et serveurs (EDR), sécurisation de la messagerie, sensibilisation des équipes.
+- **Téléphonie d'entreprise (VoIP)** : standard téléphonique, téléphonie IP et communications unifiées.
+- **Infrastructure et sauvegarde cloud** : migration Microsoft Azure / 365, sauvegarde et plan de reprise d'activité, hébergement souverain en Suisse.
+- **Conseil IT** : feuille de route informatique, budgétisation, gestion de projets, direction informatique externalisée (vCIO).
+- **Développement logiciel** : applications web et portails métier, intégrations et API sur mesure.
+- **Solutions d'intelligence artificielle** : automatisation des processus, assistants intelligents, analyse prédictive.
+
+## Pourquoi Pulsar
+
+- **Proximité genevoise** : équipe locale, intervention à distance ou sur site à Genève et alentours.
+- **Réactivité** : temps de réponse garantis par SLA et support réactif.
+- **Expertise éprouvée** : plus de 20 ans d'expérience en cybersécurité, cloud et infrastructure.
+- **Données en Suisse** : hébergement souverain et conformité aux exigences suisses de protection des données.
+
+## Questions fréquentes
+
+**Où se situe Pulsar ICT ?** À Genève (Aïre, 1219), Suisse. L'entreprise intervient à Genève et dans toute la Suisse romande.
+
+**Quels types de clients accompagnez-vous ?** Principalement les PME de la région genevoise et de Suisse romande.
+
+**Les données sont-elles hébergées en Suisse ?** Oui, un hébergement souverain en Suisse est proposé pour répondre aux exigences de conformité.
+
+**Depuis quand Pulsar existe-t-elle ?** Depuis 2006, soit plus de 20 ans d'expérience.
+
+## Contact
+
+- Email : info@pulsarvoip.ch
+- Téléphone : +41 (0) 22 510 20 19
+- Adresse : Genève (Aïre), 1219, Suisse
+- LinkedIn : https://www.linkedin.com/company/pulsar-ict
