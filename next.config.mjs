@@ -7,7 +7,12 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
+  // Standalone output is only for containerized deploys (Docker/Railway), where
+  // the server is started with `node .next/standalone/server.js`.
+  // On Infomaniak (which runs `next start`) it must stay OFF, otherwise the
+  // running server and the built assets mismatch ("Failed to find Server Action").
+  // The Dockerfile sets NEXT_OUTPUT_STANDALONE=true at build time.
+  output: process.env.NEXT_OUTPUT_STANDALONE === 'true' ? 'standalone' : undefined,
   eslint: {
     ignoreDuringBuilds: true,
   },
